@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furigana Auto-Annotation</title>
+  <style>
+    ruby {
+      position: relative;
+    }
+
+    rt {
+      font-size: 0.7em;
+    }
+
+    .invisible {
+      visibility: hidden;
+    }
+
+    .toggleButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: grey;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .toggleButton--on {
+      background-color: blue;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="content">
+    <div>
+      Googleによると、明日は、雨が降るそうです。
+    </div>
+    <div>
+      Yesterday was Saturday.
+    </div>
+    <div>
+      今日は日曜日です。寿司が好きですね。
+    </div>
+  </div>
+
+  <button id="furiganaToggle" class="toggleButton invisible">Toggle Furigana</button>
+
+  <script type="module">
+    const hiddenClass = 'invisible'
+    import('./furigana_annotator.js').then(async function (module) {
+      const { toggleFurigana, addRubyAnnotationsToPage } = module;
+
+      await addRubyAnnotationsToPage('../dict/', hiddenClass)
+
+      const toggleButton = document.getElementById('furiganaToggle');
+      toggleButton.addEventListener('click', () => {
+        toggleButton.classList.toggle('toggleButton--on');
+        toggleFurigana(hiddenClass)
+      });
+
+      // Everything should be ready, so make the toggle button visible
+      toggleButton.classList.remove(hiddenClass);
+    });
+  </script>
+</body>
+
+</html>
